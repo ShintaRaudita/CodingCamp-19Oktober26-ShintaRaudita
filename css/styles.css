@@ -21,13 +21,13 @@
 
 body { background-color: var(--bg-color); color: var(--text-color); padding: 1.5rem; transition: background 0.3s, color 0.3s; overflow-x: hidden; }
 
-/* Header - Diperbarui dengan flex-wrap untuk mencegah terpotong */
+/* Header */
 #header { 
     display: flex; 
     justify-content: space-between; 
     align-items: center; 
-    flex-wrap: wrap; /* Perbaikan responsif */
-    gap: 1.5rem; /* Perbaikan jarak saat membungkus (wrap) */
+    flex-wrap: wrap; 
+    gap: 1.5rem; 
     background-color: var(--primary-color); 
     padding: 1.5rem 2rem; 
     border-radius: 8px; 
@@ -80,19 +80,27 @@ button:hover, .import-label:hover { filter: brightness(1.2); }
     flex-direction: column;
     min-width: 0;
 }
-.bento-card h2 { font-size: 1.4rem; font-weight: normal; margin-bottom: 1rem; color: var(--text-color); }
+
+.bento-card h2 { 
+    font-size: 1.4rem; 
+    font-weight: normal; 
+    margin-bottom: 1rem; 
+    color: var(--text-color); 
+    text-transform: lowercase; 
+}
 .card-header-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem; }
 .card-header-row h2 { margin-bottom: 0; }
 
 .sort-controls { display: flex; align-items: center; flex-wrap: wrap; gap: 0.5rem; }
-.sort-by-text { font-size: 0.9rem; color: var(--accent-2); }
-select { background: var(--bg-color); color: var(--text-color); border: 1.5px solid var(--secondary-color); padding: 0.3rem 0.6rem; border-radius: 4px; outline: none; }
+.sort-by-text { font-size: 0.95rem; color: var(--accent-2); text-transform: lowercase; }
+select { background: var(--bg-color); color: var(--text-color); border: 1.5px solid var(--secondary-color); padding: 0.3rem 0.6rem; border-radius: 4px; outline: none; font-size: 0.9rem; }
 
 /* Focus Timer */
-#focus-timer h2 { margin-bottom: 1.5rem; border-bottom: none; font-size: 1.4rem; }
+#focus-timer h2 { margin-bottom: 1.5rem; border-bottom: none; }
 #timer-display { font-size: 5rem; text-align: center; font-weight: normal; color: var(--text-color); margin-bottom: 2rem; letter-spacing: 2px; }
 .timer-controls { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; margin-bottom: 2.5rem; }
-.btn-pink { background-color: var(--accent-1); border-radius: 6px; padding: 0.6rem 1.8rem; font-size: 1.1rem; color: white; border: none; cursor: pointer; flex: 1 1 auto; max-width: 120px;}
+.btn-pink { background-color: var(--accent-1); border-radius: 4px; padding: 0.6rem 1.2rem; font-size: 1rem; color: white; border: none; cursor: pointer; flex: 1 1 auto; max-width: 120px; transition: filter 0.2s; }
+.btn-pink:hover { filter: brightness(1.1); }
 
 .inline-settings { display: flex; justify-content: center; gap: 1rem; background-color: var(--bg-color); border: 1.5px solid var(--secondary-color); border-radius: 8px; padding: 0.8rem; margin-top: auto; flex-wrap: wrap; }
 .inline-settings label { color: var(--text-color); font-size: 0.9rem; display: flex; align-items: center; gap: 0.5rem; flex-wrap: nowrap; }
@@ -100,29 +108,41 @@ select { background: var(--bg-color); color: var(--text-color); border: 1.5px so
 
 /* Progress bar */
 .progress-section { margin-bottom: 1.5rem; width: 100%; }
-#progress-percentage { font-size: 0.95rem; color: var(--text-color); margin-bottom: 0.5rem; }
+#progress-percentage { font-size: 0.95rem; color: var(--text-color); margin-bottom: 0.5rem; text-transform: lowercase; }
 .progress-container { width: 100%; background: #3c3c3c; border-radius: 4px; overflow: hidden; height: 16px; border: 1px solid var(--secondary-color); }
 #progress-bar { height: 100%; background-color: var(--success-green); width: 0%; transition: width 0.3s; }
 
-/* Tasks Forms & Lists - Diperbarui untuk flex-wrap */
-.task-form { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem; }
-.task-form input[type="text"] { flex: 1 1 150px; padding: 0.6rem; border: 2px solid var(--secondary-color); border-radius: 4px; background: var(--bg-color); color: var(--text-color); font-size: 0.95rem; outline: none; }
-.task-form button { flex: 0 1 auto; background-color: #FFFFFF; color: #1B1634; border: 1px solid var(--secondary-color); padding: 0.6rem 1rem; border-radius: 4px; }
+/* Tasks Forms & Lists */
+.task-form { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem; align-items: stretch; }
+.task-form input[type="text"] { 
+    flex: 1 1 150px; 
+    padding: 0.6rem 0.8rem; 
+    border: none; 
+    border-radius: 4px; 
+    background: #FFFFFF; 
+    color: #1B1634; 
+    font-size: 0.95rem; 
+    outline: none; 
+}
+.task-form input[type="text"]::placeholder { color: #666; }
+.task-form .btn-pink { flex: 0 1 auto; max-width: none; } 
 
-.task-list { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
-.task-item { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; padding: 0.6rem 1rem; background: var(--bg-color); border-radius: 4px; border: 1.5px solid var(--secondary-color); }
-.task-item-left { display: flex; align-items: center; gap: 0.5rem; flex: 1; min-width: 150px; }
-.task-item-left span { outline: none; word-break: break-all; font-size: 1rem; }
+.task-list { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+.task-item { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; padding: 0.7rem 1rem; background: var(--bg-color); border-radius: 4px; border: 1px solid var(--secondary-color); }
+.task-item-left { display: flex; align-items: center; gap: 0.8rem; flex: 1; min-width: 150px; }
+.task-item-left span { outline: none; word-break: break-all; font-size: 1rem; color: var(--text-color); }
 .task-item.completed span { text-decoration: line-through; opacity: 0.5; }
-.task-icon { font-size: 1rem; color: var(--accent-2); opacity: 0.7; }
 
-.task-actions { display: flex; align-items: center; gap: 0.4rem; font-size: 0.95rem; color: var(--accent-1); }
-.edit-task-btn, .del-task-btn { background: none; border: none; color: inherit; font-size: 1rem; cursor: pointer; padding: 0; margin: 0; }
-.action-pipe { color: var(--accent-1); font-weight: normal; margin: 0 0.1rem; }
+.task-actions { display: flex; align-items: center; gap: 0.4rem; font-size: 1rem; color: var(--accent-1); }
+.edit-task-btn, .del-task-btn { background: none; border: none; color: inherit; font-size: 1.1rem; cursor: pointer; padding: 0; margin: 0; transition: transform 0.2s; }
+.edit-task-btn:hover, .del-task-btn:hover { transform: scale(1.1); }
+.action-pipe { color: var(--accent-1); font-weight: normal; margin: 0 0.2rem; }
 .active-date-label { display: block; font-size: 0.9rem; color: var(--accent-2); margin-top: -0.5rem; margin-bottom: 0.8rem; }
 
 /* Calendar */
 #calendar-header { display: flex; justify-content: space-between; align-items: center; margin: 0.5rem 0 1rem 0; font-size: 1rem; text-transform: lowercase; }
+#calendar-header .btn-pink { flex: 0 0 auto; padding: 0.3rem 1rem; font-weight: bold; } /* Layout Calendar Nav Buttons */
+
 #calendar-grid-header { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center; font-weight: bold; font-size: 0.85rem; color: var(--accent-2); margin-bottom: 0.5rem; }
 #calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center; }
 .cal-day { padding: 0.6rem 0.2rem; background: var(--bg-color); border-radius: 4px; cursor: pointer; border: 1.5px solid var(--secondary-color); font-size: 0.85rem; }
@@ -131,7 +151,7 @@ select { background: var(--bg-color); color: var(--text-color); border: 1.5px so
 .cal-day.has-task { border-color: var(--accent-1); }
 .cal-day.empty-cell { border-color: transparent; background: transparent; cursor: default; }
 
-/* Quick links - Form diperbarui untuk mencegah overflow */
+/* Quick links */
 #quick-links-footer { margin-top: 1.5rem; }
 #link-add-form { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem; }
 #link-add-form input { flex: 1 1 200px; padding: 0.6rem; border: 2px solid var(--secondary-color); border-radius: 4px; background: var(--bg-color); color: var(--text-color); font-size: 0.95rem; outline: none; }
@@ -148,7 +168,6 @@ select { background: var(--bg-color); color: var(--text-color); border: 1.5px so
 #notify.show-error { background-color: var(--accent-1); color: white; opacity: 1; }
 #notify.show-info { background-color: var(--success-green); color: #1B1634; opacity: 1; }
 
-/* Media Queries untuk Layar Kecil */
 @media (max-width: 850px) {
     .bento-grid { grid-template-columns: 1fr; }
     .header-controls { align-items: flex-start; }

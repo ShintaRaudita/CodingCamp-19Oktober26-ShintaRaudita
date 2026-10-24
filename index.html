@@ -33,7 +33,7 @@
     <main class="bento-grid">
         <!-- LEFT COLUMN: Focus Timer & Upcoming Task -->
         <div class="grid-column">
-            <!-- Focus Timer Card (v1 Layout) -->
+            <!-- Focus Timer Card -->
             <section id="focus-timer" class="bento-card">
                 <h2>Focus Timer</h2>
                 
@@ -56,12 +56,18 @@
             <section id="upcoming-tasks" class="bento-card drop-zone">
                 <div class="card-header-row">
                     <h2>upcoming task</h2>
-                    <span class="sort-by-text">sort by</span>
+                    <div class="sort-controls">
+                        <span class="sort-by-text">sort by</span>
+                        <select id="upcoming-sort-tasks">
+                            <option value="az">A-Z</option>
+                            <option value="completion">Completion</option>
+                        </select>
+                    </div>
                 </div>
                 <span id="active-date-display" class="active-date-label">Select a date</span>
-                <form id="upcoming-add-form" style="display: none;">
+                <form id="upcoming-add-form" class="task-form" style="display: none;">
                     <input type="text" id="upcoming-task-input" placeholder="add new task" required>
-                    <button type="submit">add task</button>
+                    <button type="submit" class="btn-pink">add task</button>
                 </form>
                 <ul id="upcoming-task-list" class="task-list"></ul>
             </section>
@@ -76,14 +82,13 @@
                     <div class="sort-controls">
                         <span class="sort-by-text">sort by</span>
                         <select id="sort-tasks">
-                            <option value="none">First option</option>
                             <option value="az">A-Z</option>
                             <option value="completion">Completion</option>
                         </select>
                     </div>
                 </div>
 
-                <!-- Progress Bar (Moved Here & Responsive) -->
+                <!-- Progress Bar -->
                 <div class="progress-section">
                     <div id="progress-percentage">0% task completed</div>
                     <div class="progress-container">
@@ -91,20 +96,20 @@
                     </div>
                 </div>
 
-                <form id="today-add-form">
+                <form id="today-add-form" class="task-form">
                     <input type="text" id="today-task-input" placeholder="add new task" required>
-                    <button type="submit">add task</button>
+                    <button type="submit" class="btn-pink">add task</button>
                 </form>
                 <ul id="today-task-list" class="task-list"></ul>
             </section>
 
             <!-- Calendar Card -->
             <section id="calendar-widget" class="bento-card">
-                <h2>calendar</h2>
+                <h2>Calendar AA</h2>
                 <div id="calendar-header">
-                    <button id="prev-month">&lt;</button>
+                    <button id="prev-month" class="btn-pink">&lt;</button>
                     <span id="current-month-year">october 2026</span>
-                    <button id="next-month">&gt;</button>
+                    <button id="next-month" class="btn-pink">&gt;</button>
                 </div>
                 <div id="calendar-grid-header">
                     <div>M</div><div>T</div><div>W</div><div>T</div><div>F</div><div>S</div><div>S</div>

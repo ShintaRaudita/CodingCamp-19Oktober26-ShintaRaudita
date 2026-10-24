@@ -50,11 +50,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const Header = {
         settings: Storage.read('dashboard.settings') || { name: 'Shinta', theme: 'dark' },
         init() {
-            // Clock
             setInterval(() => this.renderClock(), 1000);
             this.renderClock();
             
-            // Name
             const nameEl = document.getElementById('user-name');
             nameEl.textContent = this.settings.name;
             document.getElementById('edit-name-btn').addEventListener('click', () => {
@@ -66,7 +64,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 this.saveSettings();
             });
 
-            // Theme
             document.body.className = this.settings.theme + '-theme';
             document.getElementById('theme-toggle').addEventListener('click', () => {
                 this.settings.theme = this.settings.theme === 'dark' ? 'light' : 'dark';
@@ -74,7 +71,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 this.saveSettings();
             });
 
-            // IO
             document.getElementById('export-btn').addEventListener('click', () => Storage.exportJSON());
             document.getElementById('import-btn').addEventListener('change', (e) => {
                 if(e.target.files[0]) Storage.importJSON(e.target.files[0]);
@@ -156,9 +152,10 @@ document.addEventListener("DOMContentLoaded", () => {
         tasks: Storage.read('dashboard.tasks') || [],
         activeDate: null,
         currentDateStr: new Date().toISOString().split('T')[0],
+        calendarViewDate: new Date(), // Menambahkan state penunjuk bulan kalender
         
         init() {
-            this.renderCalendar(new Date());
+            this.renderCalendar();
             this.renderLists();
             
             document.getElementById('today-add-form').addEventListener('submit', (e) => {
@@ -173,8 +170,21 @@ document.addEventListener("DOMContentLoaded", () => {
                 e.target.reset();
             });
             
+            // Listener Sort untuk kedua bagian
             document.getElementById('sort-tasks').addEventListener('change', () => this.renderLists());
+            document.getElementById('upcoming-sort-tasks').addEventListener('change', () => this.renderLists());
 
+            // Listener navigasi Calendar
+            document.getElementById('prev-month').addEventListener('click', () => {
+                this.calendarViewDate.setMonth(this.calendarViewDate.getMonth() - 1);
+                this.renderCalendar();
+            });
+            document.getElementById('next-month').addEventListener('click', () => {
+                this.calendarViewDate.setMonth(this.calendarViewDate.getMonth() + 1);
+                this.renderCalendar();
+            });
+
+            // HTML5 Drag Drop
             const dropZones = [document.getElementById('today-tasks'), document.getElementById('upcoming-tasks')];
             dropZones.forEach(zone => {
                 zone.addEventListener('dragover', e => e.preventDefault());
@@ -188,6 +198,14 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
                 });
             });
+        },
+        formatDateDDMMYYYY(dateStr) {
+            if (!dateStr) return "Select a date";
+            const parts = dateStr.split('-');
+            if (parts.length === 3) {
+                return `${parts[2]}-${parts[1]}-${parts[0]}`; // YYYY-MM-DD to DD-MM-YYYY
+            }
+            return dateStr;
         },
         add(text, date) {
             text = text.trim();
@@ -218,23 +236,23 @@ document.addEventListener("DOMContentLoaded", () => {
         saveAndRender() {
             Storage.write('dashboard.tasks', this.tasks);
             this.renderLists();
-            this.renderCalendar(new Date(this.activeDate || this.currentDateStr));
+            this.renderCalendar(); // Mempertahankan bulan/tahun kalender saat ini
         },
-        renderLists() {
-            const sortMode = document.getElementById('sort-tasks').value;
-            const sortFn = (a, b) => {
+        getSortFn(sortMode) {
+            return (a, b) => {
                 if(sortMode === 'az') return a.text.localeCompare(b.text);
                 if(sortMode === 'completion') return (a.completed === b.completed)? 0 : a.completed ? 1 : -1;
                 return 0;
             };
-
-            // Today List
-            const todayTasks = this.tasks.filter(t => t.date === this.currentDateStr).sort(sortFn);
+        },
+        renderLists() {
+            // -- Today Tasks --
+            const sortModeToday = document.getElementById('sort-tasks').value;
+            const todayTasks = this.tasks.filter(t => t.date === this.currentDateStr).sort(this.getSortFn(sortModeToday));
             const todayList = document.getElementById('today-task-list');
             todayList.innerHTML = '';
             todayTasks.forEach(t => todayList.appendChild(this.createTaskEl(t)));
             
-            // Dynamic Progress Bar Update
             const totalToday = todayTasks.length;
             const completedToday = todayTasks.filter(t => t.completed).length;
             const pct = totalToday === 0 ? 0 : Math.round((completedToday / totalToday) * 100);
@@ -242,17 +260,21 @@ document.addEventListener("DOMContentLoaded", () => {
             document.getElementById('progress-bar').style.width = pct + '%';
             document.getElementById('progress-percentage').textContent = `${pct}% task completed`;
 
-            // Upcoming List
+            // -- Upcoming Tasks --
+            const sortModeUp = document.getElementById('upcoming-sort-tasks').value;
             const upcomingForm = document.getElementById('upcoming-add-form');
             const upcomingList = document.getElementById('upcoming-task-list');
             upcomingList.innerHTML = '';
             
             if(this.activeDate && this.activeDate !== this.currentDateStr) {
                 upcomingForm.style.display = 'flex';
-                const upcomingTasks = this.tasks.filter(t => t.date === this.activeDate).sort(sortFn);
+                document.getElementById('active-date-display').textContent = this.formatDateDDMMYYYY(this.activeDate);
+                
+                const upcomingTasks = this.tasks.filter(t => t.date === this.activeDate).sort(this.getSortFn(sortModeUp));
                 upcomingTasks.forEach(t => upcomingList.appendChild(this.createTaskEl(t)));
             } else {
                 upcomingForm.style.display = 'none';
+                document.getElementById('active-date-display').textContent = "Select a date";
             }
         },
         createTaskEl(task) {
@@ -268,14 +290,10 @@ document.addEventListener("DOMContentLoaded", () => {
             chk.type = 'checkbox'; chk.checked = task.completed;
             chk.onchange = () => this.toggle(task.id);
             
-            const taskIcon = document.createElement('span');
-            taskIcon.className = 'task-icon';
-            taskIcon.textContent = '📁'; 
-            
             const span = document.createElement('span');
             span.textContent = task.text;
             
-            leftDiv.append(chk, taskIcon, span);
+            leftDiv.append(chk, span);
             
             const rightActions = document.createElement('div');
             rightActions.className = 'task-actions';
@@ -298,7 +316,8 @@ document.addEventListener("DOMContentLoaded", () => {
             li.append(leftDiv, rightActions);
             return li;
         },
-        renderCalendar(dateObj) {
+        renderCalendar() {
+            const dateObj = this.calendarViewDate; // Menggunakan state navigasi bulan
             const grid = document.getElementById('calendar-grid');
             grid.innerHTML = '';
             document.getElementById('current-month-year').textContent = dateObj.toLocaleString('default', { month: 'long', year: 'numeric' });
@@ -306,7 +325,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const year = dateObj.getFullYear();
             const month = dateObj.getMonth();
             const firstDay = new Date(year, month, 1).getDay();
-            const adjustedFirstDay = firstDay === 0 ? 6 : firstDay - 1; // Convert Sunday(0) to index 6 for Monday start
+            const adjustedFirstDay = firstDay === 0 ? 6 : firstDay - 1; // Ubah ke standar senin mulai
             const daysInMonth = new Date(year, month + 1, 0).getDate();
             
             for(let i=0; i<adjustedFirstDay; i++) {
@@ -326,7 +345,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 
                 dayEl.onclick = () => {
                     this.activeDate = dStr;
-                    document.getElementById('active-date-display').textContent = dStr;
+                    document.getElementById('active-date-display').textContent = this.formatDateDDMMYYYY(dStr);
                     this.saveAndRender();
                 };
                 grid.appendChild(dayEl);
