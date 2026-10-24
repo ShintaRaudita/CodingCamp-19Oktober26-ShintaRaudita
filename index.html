@@ -7,11 +7,11 @@
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body class="dark-theme">
-    <!-- Header: good night, user & Buttons -->
+    <!-- Header -->
     <header id="header">
         <div class="header-left">
             <h1 id="greeting-container">
-                good <span id="time-of-day">night</span>, 
+                Good <span id="time-of-day">night</span>, 
                 <span id="user-name" contenteditable="false">Shinta</span>
                 <button id="edit-name-btn" title="Edit Name">✏️</button>
             </h1>
@@ -31,42 +31,24 @@
 
     <!-- Bento Grid Layout -->
     <main class="bento-grid">
-        <!-- LEFT COLUMN: Focus Timer & Task Progress -->
+        <!-- LEFT COLUMN: Focus Timer & Upcoming Task -->
         <div class="grid-column">
-            <!-- Focus Timer Card -->
+            <!-- Focus Timer Card (v1 Layout) -->
             <section id="focus-timer" class="bento-card">
-                <div class="card-header-row">
-                    <h2>focus timer</h2>
-                    <button id="timer-settings-btn" class="text-btn">timer setting</button>
-                </div>
+                <h2>Focus Timer</h2>
                 
-                <div class="timer-modes">
-                    <span class="timer-mode">focus</span>
-                    <span class="timer-mode">short break</span>
-                    <span class="timer-mode">long break</span>
-                </div>
-
-                <div id="timer-display">25 : 00</div>
+                <div id="timer-display">25:00</div>
 
                 <div class="timer-controls">
-                    <button id="timer-start" class="control-link">start</button>
-                    <button id="timer-stop" class="control-link">stop</button>
-                    <button id="timer-reset" class="control-link">break</button>
+                    <button id="timer-start" class="btn-pink">Start</button>
+                    <button id="timer-stop" class="btn-pink">Stop</button>
+                    <button id="timer-reset" class="btn-pink">Reset</button>
                 </div>
 
-                <!-- Hidden Timer Input Settings (Toggle on Settings Click) -->
-                <div class="timer-settings" id="timer-settings-panel" style="display: none;">
-                    <label>Focus: <input type="number" id="setting-focus" value="25" min="1">m</label>
-                    <label>Short: <input type="number" id="setting-short" value="5" min="1">m</label>
-                    <label>Long: <input type="number" id="setting-long" value="10" min="1">m</label>
-                </div>
-
-                <!-- Task Completion Progress (Now grouped under Timer) -->
-                <div class="progress-section">
-                    <div id="progress-percentage">30% task completed</div>
-                    <div class="progress-container">
-                        <div id="progress-bar"></div>
-                    </div>
+                <div class="timer-settings inline-settings">
+                    <label>Focus (min): <input type="number" id="setting-focus" value="25" min="1"></label>
+                    <label>Short Break: <input type="number" id="setting-short" value="5" min="1"></label>
+                    <label>Long Break: <input type="number" id="setting-long" value="10" min="1"></label>
                 </div>
             </section>
 
@@ -94,12 +76,21 @@
                     <div class="sort-controls">
                         <span class="sort-by-text">sort by</span>
                         <select id="sort-tasks">
-                            <option value="none">Default</option>
+                            <option value="none">First option</option>
                             <option value="az">A-Z</option>
                             <option value="completion">Completion</option>
                         </select>
                     </div>
                 </div>
+
+                <!-- Progress Bar (Moved Here & Responsive) -->
+                <div class="progress-section">
+                    <div id="progress-percentage">0% task completed</div>
+                    <div class="progress-container">
+                        <div id="progress-bar"></div>
+                    </div>
+                </div>
+
                 <form id="today-add-form">
                     <input type="text" id="today-task-input" placeholder="add new task" required>
                     <button type="submit">add task</button>

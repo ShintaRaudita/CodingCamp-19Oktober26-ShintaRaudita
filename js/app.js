@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
         settings: Storage.read('dashboard.settings') || { name: 'Shinta', theme: 'dark' },
         init() {
             // Clock
-            setInterval(this.renderClock, 1000);
+            setInterval(() => this.renderClock(), 1000);
             this.renderClock();
             
             // Name
@@ -89,12 +89,12 @@ document.addEventListener("DOMContentLoaded", () => {
             const date = now.getDate().toString().padStart(2, '0');
             const monthStr = months[now.getMonth()];
             const year = now.getFullYear();
-            const timeStr = now.toTimeString().split(' ')[0]; // HH:MM:SS
+            const timeStr = now.toTimeString().split(' ')[0];
             
             document.getElementById('live-clock').textContent = `${dayStr}, ${date} ${monthStr} ${year} | ${timeStr}`;
             
             const hour = now.getHours();
-            let tod = "evening";
+            let tod = "night";
             if(hour >= 5 && hour < 12) tod = "morning";
             else if (hour >= 12 && hour < 18) tod = "afternoon";
             document.getElementById('time-of-day').textContent = tod;
@@ -161,22 +161,20 @@ document.addEventListener("DOMContentLoaded", () => {
             this.renderCalendar(new Date());
             this.renderLists();
             
-            // Add Forms
             document.getElementById('today-add-form').addEventListener('submit', (e) => {
                 e.preventDefault();
                 this.add(document.getElementById('today-task-input').value, this.currentDateStr);
                 e.target.reset();
             });
+            
             document.getElementById('upcoming-add-form').addEventListener('submit', (e) => {
                 e.preventDefault();
                 if(this.activeDate) this.add(document.getElementById('upcoming-task-input').value, this.activeDate);
                 e.target.reset();
             });
             
-            // Sort
             document.getElementById('sort-tasks').addEventListener('change', () => this.renderLists());
 
-            // Drag and Drop (Native HTML5)
             const dropZones = [document.getElementById('today-tasks'), document.getElementById('upcoming-tasks')];
             dropZones.forEach(zone => {
                 zone.addEventListener('dragover', e => e.preventDefault());
@@ -230,19 +228,21 @@ document.addEventListener("DOMContentLoaded", () => {
                 return 0;
             };
 
-            // Today
+            // Today List
             const todayTasks = this.tasks.filter(t => t.date === this.currentDateStr).sort(sortFn);
             const todayList = document.getElementById('today-task-list');
             todayList.innerHTML = '';
             todayTasks.forEach(t => todayList.appendChild(this.createTaskEl(t)));
             
-            // Progress Bar
+            // Dynamic Progress Bar Update
             const totalToday = todayTasks.length;
             const completedToday = todayTasks.filter(t => t.completed).length;
-            const pct = totalToday === 0 ? 0 : (completedToday / totalToday) * 100;
+            const pct = totalToday === 0 ? 0 : Math.round((completedToday / totalToday) * 100);
+            
             document.getElementById('progress-bar').style.width = pct + '%';
+            document.getElementById('progress-percentage').textContent = `${pct}% task completed`;
 
-            // Upcoming
+            // Upcoming List
             const upcomingForm = document.getElementById('upcoming-add-form');
             const upcomingList = document.getElementById('upcoming-task-list');
             upcomingList.innerHTML = '';
@@ -261,19 +261,41 @@ document.addEventListener("DOMContentLoaded", () => {
             li.draggable = true;
             li.addEventListener('dragstart', e => e.dataTransfer.setData('text/plain', task.id));
             
+            const leftDiv = document.createElement('div');
+            leftDiv.className = 'task-item-left';
+            
             const chk = document.createElement('input');
             chk.type = 'checkbox'; chk.checked = task.completed;
             chk.onchange = () => this.toggle(task.id);
             
+            const taskIcon = document.createElement('span');
+            taskIcon.className = 'task-icon';
+            taskIcon.textContent = '📁'; 
+            
             const span = document.createElement('span');
             span.textContent = task.text;
-            span.ondblclick = () => this.edit(task.id, span);
+            
+            leftDiv.append(chk, taskIcon, span);
+            
+            const rightActions = document.createElement('div');
+            rightActions.className = 'task-actions';
+            
+            const editBtn = document.createElement('button');
+            editBtn.className = 'edit-task-btn';
+            editBtn.textContent = '✏️';
+            editBtn.onclick = () => this.edit(task.id, span);
+            
+            const pipe = document.createElement('span');
+            pipe.className = 'action-pipe';
+            pipe.textContent = '|';
             
             const del = document.createElement('button');
-            del.textContent = 'X'; del.className = 'del-btn';
+            del.className = 'del-task-btn';
+            del.textContent = '❌'; 
             del.onclick = () => this.remove(task.id);
             
-            li.append(chk, span, del);
+            rightActions.append(editBtn, pipe, del);
+            li.append(leftDiv, rightActions);
             return li;
         },
         renderCalendar(dateObj) {
@@ -284,10 +306,12 @@ document.addEventListener("DOMContentLoaded", () => {
             const year = dateObj.getFullYear();
             const month = dateObj.getMonth();
             const firstDay = new Date(year, month, 1).getDay();
+            const adjustedFirstDay = firstDay === 0 ? 6 : firstDay - 1; // Convert Sunday(0) to index 6 for Monday start
             const daysInMonth = new Date(year, month + 1, 0).getDate();
             
-            for(let i=0; i<firstDay; i++) {
+            for(let i=0; i<adjustedFirstDay; i++) {
                 const empty = document.createElement('div');
+                empty.className = 'cal-day empty-cell';
                 grid.appendChild(empty);
             }
             
