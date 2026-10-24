@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List Life Dashboard</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="dark-theme">
+    <!-- Header: good night, user & Buttons -->
+    <header id="header">
+        <div class="header-left">
+            <h1 id="greeting-container">
+                good <span id="time-of-day">night</span>, 
+                <span id="user-name" contenteditable="false">Shinta</span>
+                <button id="edit-name-btn" title="Edit Name">✏️</button>
+            </h1>
+            <div id="live-clock">Monday, 12 october 2026 | 14:24:44</div>
+        </div>
+        <div class="header-controls">
+            <button id="theme-toggle">🌓 light/dark mode</button>
+            <div class="io-buttons">
+                <label class="import-label">
+                    Import
+                    <input type="file" id="import-btn" accept=".json">
+                </label>
+                <button id="export-btn">export</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Bento Grid Layout -->
+    <main class="bento-grid">
+        <!-- LEFT COLUMN: Focus Timer & Task Progress -->
+        <div class="grid-column">
+            <!-- Focus Timer Card -->
+            <section id="focus-timer" class="bento-card">
+                <div class="card-header-row">
+                    <h2>focus timer</h2>
+                    <button id="timer-settings-btn" class="text-btn">timer setting</button>
+                </div>
+                
+                <div class="timer-modes">
+                    <span class="timer-mode">focus</span>
+                    <span class="timer-mode">short break</span>
+                    <span class="timer-mode">long break</span>
+                </div>
+
+                <div id="timer-display">25 : 00</div>
+
+                <div class="timer-controls">
+                    <button id="timer-start" class="control-link">start</button>
+                    <button id="timer-stop" class="control-link">stop</button>
+                    <button id="timer-reset" class="control-link">break</button>
+                </div>
+
+                <!-- Hidden Timer Input Settings (Toggle on Settings Click) -->
+                <div class="timer-settings" id="timer-settings-panel" style="display: none;">
+                    <label>Focus: <input type="number" id="setting-focus" value="25" min="1">m</label>
+                    <label>Short: <input type="number" id="setting-short" value="5" min="1">m</label>
+                    <label>Long: <input type="number" id="setting-long" value="10" min="1">m</label>
+                </div>
+
+                <!-- Task Completion Progress (Now grouped under Timer) -->
+                <div class="progress-section">
+                    <div id="progress-percentage">30% task completed</div>
+                    <div class="progress-container">
+                        <div id="progress-bar"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Upcoming Task Card -->
+            <section id="upcoming-tasks" class="bento-card drop-zone">
+                <div class="card-header-row">
+                    <h2>upcoming task</h2>
+                    <span class="sort-by-text">sort by</span>
+                </div>
+                <span id="active-date-display" class="active-date-label">Select a date</span>
+                <form id="upcoming-add-form" style="display: none;">
+                    <input type="text" id="upcoming-task-input" placeholder="add new task" required>
+                    <button type="submit">add task</button>
+                </form>
+                <ul id="upcoming-task-list" class="task-list"></ul>
+            </section>
+        </div>
+
+        <!-- RIGHT COLUMN: To Do List Today & Calendar -->
+        <div class="grid-column">
+            <!-- To Do List Today Card -->
+            <section id="today-tasks" class="bento-card drop-zone">
+                <div class="card-header-row">
+                    <h2>to do list today</h2>
+                    <div class="sort-controls">
+                        <span class="sort-by-text">sort by</span>
+                        <select id="sort-tasks">
+                            <option value="none">Default</option>
+                            <option value="az">A-Z</option>
+                            <option value="completion">Completion</option>
+                        </select>
+                    </div>
+                </div>
+                <form id="today-add-form">
+                    <input type="text" id="today-task-input" placeholder="add new task" required>
+                    <button type="submit">add task</button>
+                </form>
+                <ul id="today-task-list" class="task-list"></ul>
+            </section>
+
+            <!-- Calendar Card -->
+            <section id="calendar-widget" class="bento-card">
+                <h2>calendar</h2>
+                <div id="calendar-header">
+                    <button id="prev-month">&lt;</button>
+                    <span id="current-month-year">october 2026</span>
+                    <button id="next-month">&gt;</button>
+                </div>
+                <div id="calendar-grid-header">
+                    <div>M</div><div>T</div><div>W</div><div>T</div><div>F</div><div>S</div><div>S</div>
+                </div>
+                <div id="calendar-grid"></div>
+            </section>
+        </div>
+    </main>
+
+    <!-- FULL WIDTH BOTTOM: Quick Links -->
+    <footer id="quick-links-footer">
+        <section id="quick-links" class="bento-card">
+            <h2>quick links</h2>
+            <form id="link-add-form">
+                <input type="text" id="link-label" placeholder="Label (e.g. Gmail)" required>
+                <input type="url" id="link-url" placeholder="URL (e.g. https://...)" required>
+                <button type="submit">add link</button>
+            </form>
+            <div id="links-grid"></div>
+        </section>
+    </footer>
+
+    <div id="notify" aria-live="polite"></div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>

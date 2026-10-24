@@ -1,0 +1,157 @@
+:root {
+    --bg-color: #1B1634;
+    --primary-color: #422960;
+    --secondary-color: #01F2FD;
+    --accent-1: #C03F82;
+    --accent-2: #C2E3F6;
+    --text-color: #FFFFFF;
+    --success-green: #00FF00; /* Neon green matching UI and Requirement */
+}
+
+.light-theme {
+    --bg-color: #F0F0F5;
+    --primary-color: #C2E3F6;
+    --secondary-color: #422960;
+    --accent-1: #C03F82;
+    --accent-2: #01F2FD;
+    --text-color: #1B1634;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
+
+body { background-color: var(--bg-color); color: var(--text-color); padding: 1.5rem; transition: background 0.3s, color 0.3s; }
+
+/* Header - horizontal banner with outer border spacing */
+#header { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    background-color: var(--primary-color); 
+    padding: 1.5rem 2rem; 
+    border-radius: 8px; 
+    margin-bottom: 2rem; 
+    border: 2px solid var(--secondary-color); 
+}
+#greeting-container { font-size: 1.8rem; display: flex; align-items: center; gap: 0.5rem; font-weight: normal; }
+#user-name { border-bottom: 1.5px dashed transparent; outline: none; text-decoration: none; }
+#user-name[contenteditable="true"] { border-bottom: 1.5px dashed var(--secondary-color); }
+#edit-name-btn { background: none; border: none; cursor: pointer; font-size: 1.2rem; margin-left: 0.2rem; }
+#live-clock { font-size: 1.1rem; color: var(--accent-2); margin-top: 0.4rem; }
+
+/* Header controls - stacked top/down on right */
+.header-controls { display: flex; flex-direction: column; align-items: flex-end; gap: 0.5rem; }
+.io-buttons { display: flex; gap: 0.5rem; }
+
+/* Rounded edge Button standard matching wireframe image */
+button, .import-label { 
+    background-color: var(--accent-1); 
+    color: #fff; 
+    border: none; 
+    padding: 0.5rem 1.2rem; 
+    border-radius: 4px; 
+    cursor: pointer; 
+    font-weight: normal; 
+    font-size: 0.95rem;
+    display: inline-block;
+}
+button:hover, .import-label:hover { filter: brightness(1.2); }
+
+#theme-toggle { background-color: var(--success-green); color: #1B1634; font-weight: bold; width: 100%; text-align: center; }
+.import-label { background-color: var(--success-green); color: #1B1634; font-weight: bold; font-size: 0.95rem; }
+.import-label input[type="file"] { display: none; }
+#export-btn { background-color: var(--success-green); color: #1B1634; font-weight: bold; }
+
+/* Main Bento Layout - exact wireframe double column template */
+.bento-grid { 
+    display: grid; 
+    grid-template-columns: 1fr 1fr; 
+    gap: 1.5rem; 
+    align-items: start;
+    margin-bottom: 2rem;
+}
+.grid-column { display: flex; flex-direction: column; gap: 1.5rem; }
+
+.bento-card { 
+    background-color: var(--primary-color); 
+    padding: 1.5rem; 
+    border-radius: 8px; 
+    border: 2px solid var(--secondary-color); 
+    display: flex;
+    flex-direction: column;
+}
+.bento-card h2 { font-size: 1.4rem; font-weight: normal; margin-bottom: 1rem; color: var(--text-color); }
+
+.card-header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+.card-header-row h2 { margin-bottom: 0; }
+
+/* Sub header & Utility Buttons */
+.text-btn { background: #3B5998; color: var(--text-color); font-size: 0.85rem; padding: 0.3rem 0.8rem; border-radius: 4px; border: 1px solid var(--secondary-color); }
+.sort-by-text { font-size: 0.9rem; color: var(--accent-2); margin-right: 0.5rem; }
+select { background: var(--bg-color); color: var(--text-color); border: 1.5px solid var(--secondary-color); padding: 0.3rem 0.6rem; border-radius: 4px; outline: none; }
+
+/* Focus Timer Styling */
+.timer-modes { display: flex; justify-content: space-around; font-size: 1rem; color: var(--accent-2); margin: 0.5rem 0 1.5rem 0; }
+#timer-display { font-size: 4.5rem; text-align: center; font-weight: normal; color: var(--text-color); margin: 0.5rem 0 1.5rem 0; letter-spacing: 2px; }
+.timer-controls { display: flex; justify-content: space-around; width: 100%; margin-bottom: 1.5rem; }
+.control-link { background: none; border: none; font-size: 1.1rem; color: var(--text-color); text-decoration: underline; cursor: pointer; padding: 0; }
+.control-link:hover { color: var(--secondary-color); }
+
+/* Progress bar alignment within standard frame */
+.progress-section { margin-top: 1rem; border-top: 1.5px solid var(--bg-color); padding-top: 1rem; }
+#progress-percentage { font-size: 0.95rem; color: var(--accent-2); margin-bottom: 0.5rem; }
+.progress-container { width: 100%; background: #3c3c3c; border-radius: 4px; overflow: hidden; height: 16px; border: 1px solid var(--secondary-color); }
+#progress-bar { height: 100%; background-color: var(--success-green); width: 30%; transition: width 0.3s; }
+
+/* Task Adding forms & layout matching file format */
+form { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+input[type="text"], input[type="url"] { flex: 1; padding: 0.6rem; border: 2px solid var(--secondary-color); border-radius: 4px; background: var(--bg-color); color: var(--text-color); font-size: 0.95rem; outline: none; }
+input[type="text"]::placeholder { opacity: 0.7; }
+form button { background-color: #FFFFFF; color: #1B1634; border: 1px solid var(--secondary-color); font-weight: normal; padding: 0.6rem 1rem; border-radius: 4px; }
+
+/* Tasks list Items visual card block */
+.task-list { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+.task-item { display: flex; align-items: center; justify-content: space-between; padding: 0.6rem 1rem; background: var(--bg-color); border-radius: 4px; border: 1.5px solid var(--secondary-color); }
+.task-item-left { display: flex; align-items: center; gap: 0.5rem; flex: 1; }
+.task-item-left span { outline: none; word-break: break-all; font-size: 1rem; }
+.task-item.completed span { text-decoration: line-through; opacity: 0.5; }
+.task-icon { font-size: 1rem; color: var(--accent-2); opacity: 0.7; }
+
+/* CRUD Action layout on lists with pipelines */
+.task-actions { display: flex; align-items: center; gap: 0.4rem; font-size: 0.95rem; color: var(--accent-1); }
+.edit-task-btn, .del-task-btn { background: none; border: none; color: inherit; font-size: 1rem; cursor: pointer; padding: 0; margin: 0; }
+.action-pipe { color: var(--accent-1); font-weight: normal; margin: 0 0.1rem; }
+
+.active-date-label { display: block; font-size: 0.9rem; color: var(--accent-2); margin-top: -0.5rem; margin-bottom: 0.8rem; }
+
+/* Timer Settings Panel */
+.timer-settings { display: flex; gap: 0.8rem; justify-content: center; margin-bottom: 1rem; padding: 0.5rem; background: var(--bg-color); border-radius: 4px; border: 1px solid var(--secondary-color); }
+.timer-settings label { font-size: 0.8rem; color: var(--accent-2); }
+.timer-settings input { width: 45px; margin: 0 0.2rem; background: var(--primary-color); border: 1px solid var(--secondary-color); color: #fff; border-radius: 3px; text-align: center; }
+
+/* Calendar component design and grids */
+#calendar-header { display: flex; justify-content: space-between; align-items: center; margin: 0.5rem 0 1rem 0; font-size: 1rem; text-transform: lowercase; }
+#calendar-grid-header { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center; font-weight: bold; font-size: 0.85rem; color: var(--accent-2); margin-bottom: 0.5rem; }
+#calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center; }
+.cal-day { padding: 0.6rem 0.2rem; background: var(--bg-color); border-radius: 4px; cursor: pointer; border: 1.5px solid var(--secondary-color); font-size: 0.85rem; }
+.cal-day:hover { border-color: var(--accent-2); }
+.cal-day.active { background: var(--accent-1); border-color: var(--accent-1); color: #fff; font-weight: bold; }
+.cal-day.has-task { border-color: var(--accent-1); }
+.cal-day.empty-cell { border-color: transparent; background: transparent; cursor: default; }
+
+/* Quick links - wide at the base of grid spacing */
+#quick-links-footer { margin-top: 1.5rem; }
+#links-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 0.8rem; margin-top: 1rem; }
+.quick-link-wrapper { position: relative; }
+.quick-link-btn { background: var(--bg-color); border: 1.5px solid var(--secondary-color); color: var(--text-color); padding: 0.8rem; border-radius: 4px; text-align: center; text-decoration: none; display: block; font-size: 0.9rem; word-break: break-all; transition: all 0.2s; }
+.quick-link-btn:hover { background: var(--accent-1); border-color: var(--accent-1); }
+.del-link-btn { position: absolute; top: -6px; right: -6px; background: var(--accent-1); color: #FFF; font-size: 0.7rem; padding: 2px 6px; border-radius: 50%; border: 1px solid var(--secondary-color); cursor: pointer; }
+
+/* Alerts and Notifications system overlay */
+#notify { position: fixed; bottom: 20px; right: 20px; padding: 1rem; border-radius: 8px; z-index: 1000; font-weight: bold; transition: opacity 0.3s; opacity: 0; pointer-events: none; border: 1.5px solid var(--secondary-color); }
+#notify.show-error { background-color: var(--accent-1); color: white; opacity: 1; }
+#notify.show-info { background-color: var(--success-green); color: #1B1634; opacity: 1; }
+
+/* Responsive break matching wireframe grid system scaling */
+@media (max-width: 850px) {
+    .bento-grid { grid-template-columns: 1fr; }
+}
